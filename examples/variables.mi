@@ -1,0 +1,9 @@
+let five = 5;
+let ten = 10;
+
+let pi = 3.14;
+
+let flag = true;
+
+let name = "monki";
+
