@@ -9,6 +9,14 @@ import (
 
 var errorStringFormat string = `tests[%d] - %q wrong, expected=%v, got=%v`
 
+func Equal[T comparable](t *testing.T, testNumber int, what string, expected T, actual T) {
+	t.Helper()
+
+	if expected != actual {
+		t.Fatalf(fmt.Sprintf(errorStringFormat, what, expected, actual))
+	}
+}
+
 func TestNextToken(t *testing.T) {
 	input := `=+(){},;`
 	tests := []struct {
@@ -28,13 +36,25 @@ func TestNextToken(t *testing.T) {
 	lexer := New(input)
 	for i, tt := range tests {
 		tok := lexer.NextToken()
-		if tok.Type != tt.expectedType {
-			fmt.Println("literal " + tok.Literal)
-			fmt.Println("expected literal " + tt.expectedLiteral)
-			t.Fatalf(fmt.Sprintf(errorStringFormat, i, "tokenType", tt.expectedType, tok.Type))
-		}
-		if tok.Literal != tt.expectedLiteral {
-			t.Fatalf(fmt.Sprintf(errorStringFormat, i, "literal", tt.expectedLiteral, tok.Literal))
-		}
+		Equal(t, i, "tokenType", tt.expectedType, tok.Type)
+		Equal(t, i, "literal", tt.expectedLiteral, tok.Literal)
 	}
+}
+
+func TestEmptyInput(t *testing.T) {
+	input := ""
+	tests := []struct {
+		expectedType    token.TokenType
+		expectedLiteral string
+	}{
+		{token.EOF, ""},
+	}
+
+	lexer := New(input)
+	for i, tt := range tests {
+		tok := lexer.NextToken()
+		Equal(t, i, "tokenType", tt.expectedType, tok.Type)
+		Equal(t, i, "literal", tt.expectedLiteral, tok.Literal)
+	}
+
 }
