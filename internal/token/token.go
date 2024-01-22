@@ -27,3 +27,8 @@ const (
 	FN
 	LET
 )
+
+var Keywords = map[string]TokenType{
+	"let": LET,
+	"fn":  FN,
+}
