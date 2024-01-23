@@ -13,8 +13,6 @@ const (
 
 	IDENT
 	INT
-	ASSIGN
-	PLUS
 
 	COMMA
 	SEMICOLON
@@ -26,6 +24,20 @@ const (
 
 	FN
 	LET
+
+	ASSIGN
+	PLUS
+	MINUS
+	BANG
+	ASTERISK
+	SLASH
+
+	LT
+	GT
+	LTE
+	GTE
+	EQ
+	BANG_EQ
 )
 
 var Keywords = map[string]TokenType{

@@ -24,10 +24,46 @@ func (l *Lexer) NextToken() token.Token {
 
 	var tok token.Token
 	switch l.ch {
+	case '!':
+		if l.input[l.currentCharacterPosition] == '=' {
+			l.currentCharacterPosition += 1
+			tok.Literal = l.input[l.startOfTheTokenPosition:l.currentCharacterPosition]
+			tok.Type = token.BANG_EQ
+		} else {
+			tok = newToken(token.BANG, l.ch)
+		}
 	case '=':
-		tok = newToken(token.ASSIGN, l.ch)
+		if l.input[l.currentCharacterPosition] == '=' {
+			l.currentCharacterPosition += 1
+			tok.Literal = l.input[l.startOfTheTokenPosition:l.currentCharacterPosition]
+			tok.Type = token.EQ
+		} else {
+			tok = newToken(token.ASSIGN, l.ch)
+		}
+	case '/':
+		tok = newToken(token.SLASH, l.ch)
 	case '+':
 		tok = newToken(token.PLUS, l.ch)
+	case '-':
+		tok = newToken(token.MINUS, l.ch)
+	case '*':
+		tok = newToken(token.ASTERISK, l.ch)
+	case '>':
+		if l.input[l.currentCharacterPosition] == '=' {
+			l.currentCharacterPosition += 1
+			tok.Literal = l.input[l.startOfTheTokenPosition:l.currentCharacterPosition]
+			tok.Type = token.GTE
+		} else {
+			tok = newToken(token.GT, l.ch)
+		}
+	case '<':
+		if l.input[l.currentCharacterPosition] == '=' {
+			l.currentCharacterPosition += 1
+			tok.Literal = l.input[l.startOfTheTokenPosition:l.currentCharacterPosition]
+			tok.Type = token.LTE
+		} else {
+			tok = newToken(token.LT, l.ch)
+		}
 	case '(':
 		tok = newToken(token.LPAREN, l.ch)
 	case ')':

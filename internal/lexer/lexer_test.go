@@ -13,7 +13,6 @@ var errorStringFormat string = `tests[%d] - %q wrong, expected=%v, got=%v`
 func Equal[T comparable](t *testing.T, testNumber int, what string, expected T, actual T) {
 	t.Helper()
 
-	fmt.Println(expected, actual)
 	if expected != actual {
 		t.Fatalf(fmt.Sprintf(errorStringFormat, testNumber, what, expected, actual))
 	}
@@ -74,7 +73,7 @@ func TestProperMonkiSourceCode(t *testing.T) {
 		{token.LET, "let"},
 		{token.IDENT, "five"},
 		{token.ASSIGN, "="},
-		{token.INT, "5"},
+		{token.INT, "125"},
 		{token.SEMICOLON, ";"},
 
 		{token.LET, "let"},
@@ -103,6 +102,37 @@ func TestProperMonkiSourceCode(t *testing.T) {
 		{token.EOF, ""},
 	}
 
+	lexer := New(string(input))
+	for i, tt := range tests {
+		tok := lexer.NextToken()
+		Equal(t, i, "literal", tt.expectedLiteral, tok.Literal)
+		Equal(t, i, "tokenType", tt.expectedType, tok.Type)
+	}
+}
+
+func TestOperators(t *testing.T) {
+	input, err := os.ReadFile("testdata/operators.mnk")
+	if err != nil {
+		panic(err)
+	}
+
+	tests := []struct {
+		expectedType    token.TokenType
+		expectedLiteral string
+	}{
+		{token.BANG, "!"},
+		{token.MINUS, "-"},
+		{token.SLASH, "/"},
+		{token.PLUS, "+"},
+		{token.ASTERISK, "*"},
+		{token.GT, ">"},
+		{token.LT, "<"},
+		{token.GTE, ">="},
+		{token.LTE, "<="},
+		{token.EQ, "=="},
+		{token.BANG_EQ, "!="},
+		{token.EOF, ""},
+	}
 	lexer := New(string(input))
 	for i, tt := range tests {
 		tok := lexer.NextToken()
