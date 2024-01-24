@@ -24,6 +24,11 @@ const (
 
 	FN
 	LET
+	IF
+	ELSE
+	RETURN
+	TRUE
+	FALSE
 
 	ASSIGN
 	PLUS
@@ -41,6 +46,11 @@ const (
 )
 
 var Keywords = map[string]TokenType{
-	"let": LET,
-	"fn":  FN,
+	"let":    LET,
+	"fn":     FN,
+	"if":     IF,
+	"else":   ELSE,
+	"true":   TRUE,
+	"false":  FALSE,
+	"return": RETURN,
 }

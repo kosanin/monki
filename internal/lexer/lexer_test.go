@@ -140,3 +140,44 @@ func TestOperators(t *testing.T) {
 		Equal(t, i, "tokenType", tt.expectedType, tok.Type)
 	}
 }
+
+func TestConditionalsAndReturn(t *testing.T) {
+	input, err := os.ReadFile("testdata/conditionals.mnk")
+	if err != nil {
+		panic(err)
+	}
+	tests := []struct {
+		expectedType    token.TokenType
+		expectedLiteral string
+	}{
+
+		{token.IF, "if"},
+
+		{token.LPAREN, "("},
+		{token.INT, "5"},
+		{token.GT, ">"},
+		{token.INT, "10"},
+		{token.RPAREN, ")"},
+
+		{token.LBRACE, "{"},
+		{token.RETURN, "return"},
+		{token.TRUE, "true"},
+		{token.SEMICOLON, ";"},
+		{token.RBRACE, "}"},
+
+		{token.ELSE, "else"},
+		{token.LBRACE, "{"},
+		{token.RETURN, "return"},
+		{token.FALSE, "false"},
+		{token.SEMICOLON, ";"},
+		{token.RBRACE, "}"},
+
+		{token.EOF, ""},
+	}
+	lexer := New(string(input))
+	for i, tt := range tests {
+		tok := lexer.NextToken()
+		Equal(t, i, "literal", tt.expectedLiteral, tok.Literal)
+		Equal(t, i, "tokenType", tt.expectedType, tok.Type)
+	}
+}
